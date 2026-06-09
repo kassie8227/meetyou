@@ -1,0 +1,1823 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, "PingFang SC", sans-serif; }
+html { height: 100%; overflow: hidden; }
+body { background: #000; height: 100vh; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+
+.phone {
+  width: 393px;
+  height: 852px;
+  background: #f2f2f5;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Status Bar (iPhone 17 Pro style, white bg, dark icons) ── */
+.iphone-status {
+  background: #fff;
+  flex-shrink: 0;
+  height: 54px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 20px 10px;
+}
+.status-time {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  letter-spacing: -0.3px;
+}
+.status-right {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.signal-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+.signal-bars span {
+  background: #1a1a1a;
+  width: 3px;
+  border-radius: 1px;
+}
+.bat-body {
+  width: 22px;
+  height: 11px;
+  border: 1.5px solid #1a1a1a;
+  border-radius: 2.5px;
+  padding: 1.5px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.bat-body::after {
+  content: "";
+  position: absolute;
+  right: -4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.5px;
+  height: 5px;
+  background: #1a1a1a;
+  border-radius: 0 1px 1px 0;
+}
+.bat-fill {
+  height: 100%;
+  width: 47%;
+  background: #1a1a1a;
+  border-radius: 1px;
+}
+.bat-pct {
+  font-size: 12px;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+/* ── Top Nav ── */
+.top-nav {
+  background: #fff;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  height: 46px;
+  border-bottom: 0.5px solid #eee;
+}
+.nav-search { width: 32px; flex-shrink: 0; display:flex; align-items:center; }
+.nav-tabs {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  height: 100%;
+}
+.nav-tab {
+  font-size: 15px;
+  color: #999;
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+.nav-tab.active { color: #ff4d88; font-weight: 600; }
+.nav-tab.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 2.5px;
+  background: #ff4d88;
+  border-radius: 2px;
+}
+.nav-post {
+  width: 40px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #555;
+  font-size: 10px;
+  gap: 1px;
+  padding-top: 3px;
+}
+
+/* ── Content ── */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 10px 0;
+  gap: 8px;
+  scrollbar-width: none;
+}
+.content::-webkit-scrollbar { display: none; }
+
+/* ── 首页卡片 ── */
+.banner-card {
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #e8889a 0%, #D46D82 52%, #c45a70 100%);
+  padding: 18px 16px 18px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+.banner-left { flex: 1; }
+.banner-title {
+  font-size: 19px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.28;
+  letter-spacing: -0.2px;
+}
+.banner-sub {
+  font-size: 12px;
+  color: rgba(255,255,255,0.88);
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.chevron {
+  display: inline-block;
+  width: 5px; height: 5px;
+  border-right: 1.5px solid rgba(255,255,255,0.8);
+  border-top: 1.5px solid rgba(255,255,255,0.8);
+  transform: rotate(45deg);
+  margin-left: 1px;
+}
+.banner-btn {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 5px 16px;
+  border: 1.5px solid rgba(255,255,255,0.65);
+  border-radius: 18px;
+  color: #fff;
+  font-size: 13px;
+}
+
+/* ── 五瓣花朵 (r=33 center circle) ── */
+.flower {
+  width: 96px; height: 96px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.flower svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.flower-text { position: relative; z-index: 2; text-align: center; line-height: 1; }
+.flower-label { font-size: 10px; color: #ff4d88; font-weight: 500; }
+.flower-pct { font-size: 22px; font-weight: 700; color: #ff4d88; margin-top: 2px; }
+.flower-pct sup { font-size: 12px; font-weight: 600; }
+
+/* ── 月经来了 ── */
+.quick-record {
+  background: #fff;
+  border-radius: 10px;
+  padding: 0 14px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.qr-label { flex: 1; font-size: 16px; color: #323232; margin-left: 10px; }
+.toggle {
+  display: inline-flex;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+}
+.toggle span {
+  padding: 6px 18px;
+  font-size: 15px;
+  font-weight: 500;
+  background: #f5f5f5;
+  color: #888;
+  line-height: 1.3;
+}
+.toggle span.active { background: #ff4d88; color: #fff; }
+
+/* ── Posts ── */
+.posts { flex: 0 0 auto; display: flex; flex-direction: column; gap: 8px; padding-bottom: 10px; }
+
+.post-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px 12px 10px;
+  flex-shrink: 0;
+}
+.post-header { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 7px; }
+.avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.post-meta { flex: 1; min-width: 0; }
+.post-name { font-size: 14px; font-weight: 500; color: #323232; }
+.post-sub { font-size: 12px; color: #bbb; margin-top: 1px; }
+.post-more { color: #ccc; font-size: 13px; line-height: 1; letter-spacing: 1px; padding-top: 2px; }
+.post-text { font-size: 15px; color: #323232; line-height: 1.55; margin-bottom: 8px; }
+.post-text .more { color: #ff4d88; }
+
+.chat-mockup {
+  background: #f4f4f6;
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  width: 58%;
+}
+.chat-time { font-size: 10px; color: #c8c8c8; text-align: center; margin: 2px 0; }
+.chat-row { display: flex; align-items: flex-end; margin: 2px 0; }
+.chat-row.right { justify-content: flex-end; }
+.bubble { padding: 4px 8px; border-radius: 8px; font-size: 11px; line-height: 1.35; max-width: 85%; }
+.bubble.gray { background: #fff; color: #444; }
+.bubble.pink { background: #ff9ec4; color: #fff; }
+
+.post-img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; border-radius: 8px; overflow: hidden; margin-bottom: 8px; }
+.img-slot { background: #eee; height: 96px; }
+.post-footer { display: flex; justify-content: flex-end; align-items: center; gap: 14px; }
+.post-action { display: flex; align-items: center; gap: 4px; color: #bbb; font-size: 13px; }
+
+/* FAB */
+.fab {
+  position: absolute;
+  width: 48px; height: 48px;
+  background: #ff4d88;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 14px rgba(255,77,136,0.5);
+  right: 18px;
+  bottom: 74px;
+  z-index: 20;
+}
+
+/* ── Bottom Tab Bar ── */
+.tabbar {
+  background: #fff;
+  border-top: 0.5px solid #e8e8e8;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 5px 0 14px;
+  flex-shrink: 0;
+}
+.tb-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 11px;
+  color: #999;
+  flex: 1;
+  gap: 2px;
+}
+.tb-item.active { color: #ff5d8a; }
+.tb-item .ic { width: 26px; height: 26px; display:flex; align-items:center; justify-content:center; }
+.tb-item .ic img { width: 100%; height: 100%; object-fit: contain; }
+
+/* ── 围绝经期阶段标签 ── */
+.stage-tag {
+  background: rgba(255,255,255,0.22);
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 20px;
+  padding: 6px 12px;
+  color: #fff; font-size: 11px; font-weight: 500;
+  text-align: center; line-height: 1.35;
+  white-space: nowrap; flex-shrink: 0;
+}
+
+/* ── 快捷记录按钮 ── */
+.qr-btn {
+  padding: 6px 16px; border-radius: 999px;
+  background: #ff4d88; color: #fff;
+  font-size: 13px; font-weight: 500; border: none;
+  display: flex; align-items: center; gap: 3px;
+  white-space: nowrap; flex-shrink: 0;
+}
+
+/* ── 今日健康建议 ── */
+.advice-section {
+  background: #fff; border-radius: 10px;
+  padding: 14px 14px 10px; flex-shrink: 0;
+}
+.advice-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px;
+}
+.advice-title { font-size: 16px; font-weight: 600; color: #1a1a1a; }
+.advice-more { font-size: 12px; color: #D46D82; }
+.advice-card {
+  display: flex; gap: 12px; padding: 12px;
+  background: #fdf6f7; border-radius: 10px;
+  margin-bottom: 8px;
+}
+.advice-card:last-child { margin-bottom: 0; }
+.advice-icon {
+  width: 38px; height: 38px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.advice-icon.bone { background: #e8f5e9; }
+.advice-icon.sleep { background: #e3f2fd; }
+.advice-body { flex: 1; min-width: 0; }
+.advice-tags { display: flex; gap: 5px; margin-bottom: 4px; }
+.advice-type-tag {
+  font-size: 10px; color: #888; background: #f0f0f0;
+  padding: 1px 6px; border-radius: 4px; line-height: 1.6;
+}
+.advice-level-tag {
+  font-size: 10px; padding: 1px 6px; border-radius: 4px;
+  font-weight: 500; line-height: 1.6;
+  background: #e8f5e9; color: #388e3c;
+}
+.advice-card-title {
+  font-size: 13px; font-weight: 600; color: #1a1a1a;
+  line-height: 1.4; margin-bottom: 2px;
+}
+.advice-reason {
+  font-size: 11px; color: #999; line-height: 1.4;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.advice-actions {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 5px;
+}
+.advice-record-link, .advice-detail-link {
+  font-size: 11px; color: #D46D82;
+  display: flex; align-items: center; gap: 2px;
+}
+
+
+/* ── Additional: Tab page system ── */
+.tab-page {
+  display: none;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+.tab-page.active { display: flex; }
+
+/* ── Record page nav ── */
+.rec-nav {
+  background: #fff;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  height: 46px;
+  border-bottom: 0.5px solid #eee;
+}
+.rec-nav-back {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #666;
+  font-size: 15px;
+  font-weight: 400;
+  width: 48px;
+  flex-shrink: 0;
+}
+.rec-nav-modes {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  height: 100%;
+}
+.rec-nav-mode {
+  font-size: 15px;
+  color: #999;
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+.rec-nav-mode.active { color: #ff4d88; font-weight: 600; }
+.rec-nav-mode.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 2.5px;
+  background: #ff4d88;
+  border-radius: 2px;
+}
+.rec-nav-right {
+  width: 48px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #555;
+  font-size: 10px;
+  gap: 1px;
+  position: relative;
+}
+.rec-nav-badge {
+  position: absolute;
+  top: -4px;
+  right: 2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff4d88;
+}
+
+/* ── Record page content ── */
+.rec-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #fff;
+  scrollbar-width: none;
+}
+.rec-content::-webkit-scrollbar { display: none; }
+
+/* ── Calendar ── */
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 4px 8px 0;
+}
+.cal-weekday {
+  text-align: center;
+  font-size: 12px;
+  color: #bbb;
+  padding: 2px 0 4px;
+}
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 0 6px;
+}
+.cal-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2px 2px;
+  min-height: 46px;
+  position: relative;
+}
+.cal-date {
+  font-size: 16px;
+  font-weight: 400;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  position: relative;
+  z-index: 1;
+}
+.cal-date.green { color: #2cb87a; }
+.cal-date.purple { color: #9b59b6; }
+.cal-date.today {
+  border: 2px solid #ff4d88;
+  color: #2cb87a;
+}
+.cal-date.predicted {
+  background: #ffd6e6;
+  color: #ff4d88;
+}
+.cal-date.empty { color: transparent; }
+.cal-sub-today {
+  font-size: 10px;
+  color: #ff4d88;
+  margin-top: -4px;
+  font-weight: 400;
+  position: relative;
+  z-index: 1;
+}
+.cal-ova-strip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 2px;
+  height: 32px;
+  background: rgba(155,89,182,0.13);
+  pointer-events: none;
+  z-index: 0;
+}
+.cal-ova-strip.start { border-radius: 8px 0 0 8px; }
+.cal-ova-strip.end   { border-radius: 0 8px 8px 0; }
+.cal-ova-strip.solo  { border-radius: 8px; }
+
+.cal-legend {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px 10px;
+  border-bottom: 0.5px solid #f0f0f0;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #666;
+}
+.legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+.legend-arrow { margin-left: auto; }
+
+.cal-submark {
+  font-size: 10px;
+  color: #3ac47d;
+  margin-top: -4px;
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+}
+.cal-submark.purple { color: #9b59b6; }
+
+/* ── Record list ── */
+.rec-list-wrap {
+  background: #f2f2f5;
+  padding-top: 8px;
+}
+.rec-list {
+  background: #fff;
+  border-radius: 12px 12px 0 0;
+  margin: 0;
+  overflow: hidden;
+}
+.rec-item {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  height: 56px;
+  border-bottom: 0.5px solid #f0f0f0;
+}
+.rec-item:last-child { border-bottom: none; }
+.rec-icon-wrap {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.rec-label {
+  flex: 1;
+  font-size: 17px;
+  color: #323232;
+  margin-left: 12px;
+}
+.rec-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.rec-add-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1.5px solid #ff4d88;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.rec-mood-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.rec-mood-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  overflow: hidden;
+}
+.rec-ytoggle {
+  display: inline-flex;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+}
+.rec-ytoggle span {
+  padding: 5px 15px;
+  font-size: 15px;
+  font-weight: 500;
+  background: #f5f5f5;
+  color: #888;
+  line-height: 1.3;
+}
+.rec-ytoggle span.active { background: #ff4d88; color: #fff; }
+
+/* Chevron arrow used in record items like 日记/疫苗本 */
+.rec-arrow {
+  width: 8px; height: 8px;
+  border-right: 1.5px solid #ccc;
+  border-top: 1.5px solid #ccc;
+  transform: rotate(45deg);
+  margin-left: 4px;
+}
+.rec-camera {
+  width: 22px; height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #c8c8c8;
+}
+.rec-habit-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.rec-habit-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #b8b8b8;
+}
+
+/* ── Me page ── */
+.me-content {
+  flex: 1;
+  overflow-y: auto;
+  background: #f2f2f5;
+  scrollbar-width: none;
+}
+.me-content::-webkit-scrollbar { display: none; }
+
+.me-header {
+  background: #f2f2f5;
+  display: flex;
+  align-items: center;
+  padding: 10px 16px 14px;
+  gap: 10px;
+}
+.me-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+.me-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #4a7c59;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  overflow: hidden;
+}
+.me-vip-badge {
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, #e05c2e, #f5993d);
+  border-radius: 6px;
+  padding: 1px 5px;
+  font-size: 9px;
+  color: #fff;
+  font-weight: 700;
+  white-space: nowrap;
+  border: 1.5px solid #f2f2f5;
+}
+.me-name-row {
+  flex: 1;
+}
+.me-username {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.me-icons-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.me-icon-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #444;
+}
+
+.vip-card {
+  margin: 0 12px 8px;
+  border-radius: 14px;
+  background: linear-gradient(130deg, #9e5ce6 0%, #e84fa4 55%, #f9976b 100%);
+  padding: 14px 14px 12px;
+  overflow: hidden;
+}
+.vip-top {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.vip-left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.vip-name { font-size: 15px; font-weight: 700; color: #fff; }
+.vip-expire { font-size: 12px; color: rgba(255,255,255,0.85); margin-left: 4px; }
+.vip-center-btn {
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.55);
+  border-radius: 18px;
+  padding: 5px 13px;
+  font-size: 13px;
+  color: #fff;
+  font-weight: 500;
+}
+.vip-benefits {
+  display: flex;
+}
+.vip-ben {
+  flex: 1;
+  padding-right: 12px;
+  border-right: 0.5px solid rgba(255,255,255,0.3);
+}
+.vip-ben:last-child { border-right: none; padding-right: 0; padding-left: 12px; }
+.vip-ben-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.vip-ben-sub { font-size: 11px; color: rgba(255,255,255,0.8); margin-top: 3px; }
+
+.promo-strip {
+  margin: 0 12px 8px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.promo-icon { font-size: 16px; }
+.promo-text { flex: 1; font-size: 13px; color: #444; }
+.promo-link { font-size: 12px; color: #999; display: flex; align-items: center; }
+
+.mode-card {
+  margin: 0 12px 8px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 14px 10px;
+}
+.mode-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+}
+.mode-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 2px;
+  border-radius: 10px;
+}
+.mode-item.cur { background: rgba(255,77,136,0.07); }
+.mode-img-wrap {
+  width: 58px;
+  height: 58px;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+}
+.mode-label { font-size: 12px; color: #555; text-align: center; line-height: 1.3; }
+.mode-label.cur { color: #ff4d88; font-weight: 600; }
+.mode-cur-tag { font-size: 10px; color: #ff4d88; margin-top: -3px; }
+
+.me-card {
+  margin: 0 12px 8px;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.me-card-item {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  height: 56px;
+  border-bottom: 0.5px solid #f0f0f0;
+}
+.me-card-item:last-child { border-bottom: none; }
+.me-card-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 18px;
+}
+.me-card-label { flex: 1; font-size: 16px; color: #1a1a1a; margin-left: 10px; }
+.me-card-sub { font-size: 13px; color: #bbb; margin-right: 4px; }
+.chevron-gray {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid #ccc;
+  border-top: 1.5px solid #ccc;
+  transform: rotate(45deg);
+}
+.baby-ava-row { display: flex; }
+.baby-ava {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1.5px solid #fff;
+  margin-left: -6px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+}
+.baby-ava:first-child { margin-left: 0; }
+
+.circles-card {
+  margin: 0 12px 8px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 14px 12px;
+}
+.circles-row {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.circles-row::-webkit-scrollbar { display: none; }
+.circle-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  width: 60px;
+}
+.circle-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  overflow: hidden;
+}
+.circle-label { font-size: 10px; color: #555; text-align: center; line-height: 1.35; }
+
+.services-card {
+  margin: 0 12px 16px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 14px 12px;
+}
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+.svc-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+.svc-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+}
+.svc-label { font-size: 11px; color: #555; text-align: center; line-height: 1.3; }
+
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <!-- ══ Status Bar: white bg, dark icons, no Dynamic Island ══ -->
+  <div class="iphone-status">
+    <span class="status-time">05:09</span>
+    <div class="status-right">
+      <!-- Signal bars -->
+      <div class="signal-bars">
+        <span style="height:4px;opacity:0.4;"></span>
+        <span style="height:6px;opacity:0.6;"></span>
+        <span style="height:8px;opacity:0.8;"></span>
+        <span style="height:11px;"></span>
+      </div>
+      <!-- Wi-Fi -->
+      <svg width="16" height="12" viewBox="0 0 24 18" fill="none">
+        <path d="M12 14.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z" fill="#1a1a1a"/>
+        <path d="M7.5 10.5A6.5 6.5 0 0 1 12 8.5a6.5 6.5 0 0 1 4.5 2" stroke="#1a1a1a" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+        <path d="M3.5 6.5A12 12 0 0 1 12 3.5a12 12 0 0 1 8.5 3" stroke="#1a1a1a" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+      </svg>
+      <!-- Battery -->
+      <div class="bat-body"><div class="bat-fill"></div></div>
+      <span class="bat-pct">47</span>
+    </div>
+  </div>
+
+  <!-- ══ 美柚 Tab (首页) ══ -->
+  <div class="tab-page active" id="page-home">
+  <!-- ══ Top Nav ══ -->
+  <div class="top-nav">
+    <div class="nav-search">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#323232" stroke-width="2.2" stroke-linecap="round">
+        <circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+    </div>
+    <div class="nav-tabs">
+      <div class="nav-tab active">妈妈</div>
+      <div class="nav-tab">k</div>
+      <div class="nav-tab">珩仔</div>
+      <div class="nav-tab">麦麦</div>
+      <div class="nav-tab">小小屁</div>
+    </div>
+    <div class="nav-post">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+      </svg>
+      <span>发帖</span>
+    </div>
+  </div>
+
+  <!-- ══ Content ══ -->
+  <div class="content">
+
+    <!-- 首页卡片：围绝经期版 -->
+    <div class="banner-card">
+      <div class="banner-left">
+        <div class="banner-title">月经推迟 5 天</div>
+        <div class="banner-sub">入睡困难与雌激素波动有关，并非单纯压力大 <span class="chevron"></span></div>
+      </div>
+
+    </div>
+
+    <!-- 快捷症状记录 -->
+    <div class="quick-record">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="14" cy="14" r="14" fill="#3DC8E0"/>
+        <rect x="8.5" y="8.5" width="4.5" height="4.5" rx="1" fill="#fff"/>
+        <rect x="15" y="8.5" width="4.5" height="4.5" rx="1" fill="#fff"/>
+        <rect x="8.5" y="15" width="4.5" height="4.5" rx="1" fill="#fff"/>
+        <rect x="15" y="15" width="4.5" height="4.5" rx="1" fill="#fff"/>
+      </svg>
+      <span class="qr-label">症状</span>
+      <div class="qr-btn">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="#fff" stroke-width="1.4"/><path d="M6.5 3.5v6M3.5 6.5h6" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg>
+        记录
+      </div>
+    </div>
+
+    <!-- 今日健康建议 -->
+    <div class="advice-section">
+      <div class="advice-header">
+        <div class="advice-title">今日健康建议</div>
+        <div class="advice-more">查看全部 ›</div>
+      </div>
+      <div class="advice-card">
+        <div class="advice-icon bone">🦴</div>
+        <div class="advice-body">
+          <div class="advice-tags">
+            <span class="advice-type-tag">营养补充</span>
+            <span class="advice-level-tag">日常调理</span>
+          </div>
+          <div class="advice-card-title">每日补充钙 600~1000mg + 维生素D</div>
+          <div class="advice-reason">围绝经期雌激素下降会加速骨质流失，尽早补充有助于延缓</div>
+          <div class="advice-actions">
+            <div class="advice-detail-link">了解更多 ›</div>
+          </div>
+        </div>
+      </div>
+      <div class="advice-card">
+        <div class="advice-icon sleep">😴</div>
+        <div class="advice-body">
+          <div class="advice-tags">
+            <span class="advice-type-tag">睡眠改善</span>
+            <span class="advice-level-tag">日常调理</span>
+          </div>
+          <div class="advice-card-title">睡前 1 小时减少屏幕使用，保持卧室凉爽</div>
+          <div class="advice-reason">潮热和体温调节变化是影响围绝经期睡眠的常见原因</div>
+          <div class="advice-actions">
+            <div class="advice-detail-link">了解更多 ›</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Posts -->
+    <div class="posts">
+      <div class="post-card">
+        <div class="post-header">
+          <div class="avatar" style="background: linear-gradient(135deg,#aaa,#666);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="rgba(255,255,255,0.85)" stroke="none">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4" fill="rgba(255,255,255,0.85)"/>
+            </svg>
+          </div>
+          <div class="post-meta">
+            <div class="post-name">珍珍W2Y1</div>
+            <div class="post-sub">宝宝 6 个月</div>
+          </div>
+          <div class="post-more">···</div>
+        </div>
+        <div class="post-text">谁家宝宝六个月了，才喝这点奶呀 😭😭😭</div>
+        <div class="chat-mockup">
+          <div class="chat-time">13:16</div>
+          <div class="chat-row right"><div class="bubble pink">喝了多少？</div></div>
+          <div class="chat-time">11:50</div>
+          <div class="chat-row"><div class="bubble gray">昨天 220ml</div></div>
+          <div class="chat-time">08:00</div>
+          <div class="chat-row right"><div class="bubble pink">今天呢</div></div>
+          <div class="chat-time">07:30</div>
+          <div class="chat-row"><div class="bubble gray">才 90ml…</div></div>
+          <div class="chat-time" style="color:#d8d8d8; margin-top:2px;">05:07 ☾</div>
+        </div>
+        <div class="post-footer">
+          <div class="post-action">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c0c0c0" stroke-width="1.8" stroke-linecap="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+            <span>40</span>
+          </div>
+          <div class="post-action">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c0c0c0" stroke-width="1.8" stroke-linecap="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+            <span>4</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="post-card">
+        <div class="post-header">
+          <div class="avatar" style="background: linear-gradient(135deg,#e8b0b8,#c97080); font-size:18px;">🐷</div>
+          <div class="post-meta">
+            <div class="post-name">胖乏胖</div>
+          </div>
+          <div class="post-more">···</div>
+        </div>
+        <div class="post-text">服了，前两天刚在杂物间找到的卷草纹 今天洗衣服又忘记从口袋拿出来 在洗衣机里战斗了四十分钟 这镯子也是经得起造，拿起来感觉比以前更… <span class="more">全文</span></div>
+        <div class="post-img-grid">
+          <div class="img-slot" style="border-radius: 4px 0 0 4px;"></div>
+          <div class="img-slot" style="border-radius: 0 4px 4px 0;"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FAB -->
+  <div class="fab">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round">
+      <path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+    </svg>
+  </div>
+  </div>
+
+  <!-- ══ 记录 Tab ══ -->
+  <div class="tab-page" id="page-record">
+    <!-- Record Nav -->
+    <div class="rec-nav">
+      <div class="rec-nav-back">
+        <svg width="7" height="13" viewBox="0 0 7 13" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 1L1 6.5 6 12"/></svg>
+        <span>5月</span>
+      </div>
+      <div class="rec-nav-modes">
+        <div class="rec-nav-mode">经期</div>
+        <div class="rec-nav-mode">备孕</div>
+        <div class="rec-nav-mode">怀孕</div>
+        <div class="rec-nav-mode active">育儿</div>
+      </div>
+      <div class="rec-nav-right">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round">
+          <rect x="2" y="2" width="9" height="9" rx="1.5"/>
+          <rect x="13" y="2" width="9" height="9" rx="1.5"/>
+          <rect x="2" y="13" width="9" height="9" rx="1.5"/>
+          <rect x="13" y="13" width="9" height="9" rx="1.5"/>
+        </svg>
+        <span>分析</span>
+        <div class="rec-nav-badge"></div>
+      </div>
+    </div>
+
+    <div class="rec-content">
+      <!-- Calendar weekdays -->
+      <div class="cal-weekdays">
+        <div class="cal-weekday">日</div>
+        <div class="cal-weekday">一</div>
+        <div class="cal-weekday">二</div>
+        <div class="cal-weekday">三</div>
+        <div class="cal-weekday">四</div>
+        <div class="cal-weekday">五</div>
+        <div class="cal-weekday">六</div>
+      </div>
+
+      <!-- Calendar grid: May 2026, starts Thursday (col 4, index 4) -->
+      <div class="cal-grid">
+        <!-- Blanks: Sun Mon Tue Wed -->
+        <div class="cal-cell"><div class="cal-date empty">·</div></div>
+        <div class="cal-cell"><div class="cal-date empty">·</div></div>
+        <div class="cal-cell"><div class="cal-date empty">·</div></div>
+        <div class="cal-cell"><div class="cal-date empty">·</div></div>
+        <!-- Thu 1, Fri 2, Sat 3 -->
+        <div class="cal-cell"><div class="cal-date green">1</div></div>
+        <div class="cal-cell"><div class="cal-date green">2</div></div>
+        <!-- Row 2 -->
+        <div class="cal-cell"><div class="cal-date green">3</div></div>
+        <div class="cal-cell"><div class="cal-date green">4</div></div>
+        <div class="cal-cell"><div class="cal-date green">5</div></div>
+        <div class="cal-cell">
+          <div class="cal-date green">6</div>
+          <div class="cal-submark">✦</div>
+        </div>
+        <div class="cal-cell"><div class="cal-date green">7</div></div>
+        <!-- 8 start of ovulation -->
+        <div class="cal-cell">
+          <div class="cal-ova-strip start"></div>
+          <div class="cal-date purple">8</div>
+        </div>
+        <div class="cal-cell">
+          <div class="cal-ova-strip end"></div>
+          <div class="cal-date purple">9</div>
+        </div>
+        <!-- Row 3: 10-16, full ovulation row -->
+        <div class="cal-cell">
+          <div class="cal-ova-strip start"></div>
+          <div class="cal-date purple">10</div>
+          <div class="cal-submark purple">✦</div>
+        </div>
+        <div class="cal-cell">
+          <div class="cal-ova-strip"></div>
+          <div class="cal-date purple">11</div>
+        </div>
+        <div class="cal-cell">
+          <div class="cal-ova-strip"></div>
+          <div class="cal-date purple">12</div>
+        </div>
+        <!-- 13 = 排卵日 with flower -->
+        <div class="cal-cell" style="position:relative;">
+          <div class="cal-ova-strip"></div>
+          <div class="cal-date purple" style="position:relative;z-index:1;">13</div>
+          <div class="cal-submark purple" style="position:relative;z-index:1;">✦</div>
+          <span style="position:absolute;top:0;right:1px;font-size:12px;z-index:2;">🌸</span>
+        </div>
+        <div class="cal-cell">
+          <div class="cal-ova-strip"></div>
+          <div class="cal-date purple">14</div>
+        </div>
+        <div class="cal-cell">
+          <div class="cal-ova-strip"></div>
+          <div class="cal-date purple">15</div>
+        </div>
+        <div class="cal-cell">
+          <div class="cal-ova-strip end"></div>
+          <div class="cal-date purple">16</div>
+        </div>
+        <!-- Row 4: 17-23 -->
+        <div class="cal-cell"><div class="cal-date green">17</div></div>
+        <div class="cal-cell"><div class="cal-date green">18</div></div>
+        <div class="cal-cell"><div class="cal-date green">19</div></div>
+        <div class="cal-cell"><div class="cal-date green">20</div></div>
+        <div class="cal-cell"><div class="cal-date green">21</div></div>
+        <div class="cal-cell"><div class="cal-date green">22</div></div>
+        <div class="cal-cell"><div class="cal-date green">23</div></div>
+        <!-- Row 5: 24-30 -->
+        <div class="cal-cell"><div class="cal-date green">24</div></div>
+        <div class="cal-cell"><div class="cal-date green">25</div></div>
+        <!-- 26 = TODAY -->
+        <div class="cal-cell">
+          <div class="cal-date green today">26</div>
+          <div class="cal-sub-today">今天</div>
+        </div>
+        <div class="cal-cell"><div class="cal-date green">27</div></div>
+        <div class="cal-cell"><div class="cal-date green">28</div></div>
+        <div class="cal-cell"><div class="cal-date green">29</div></div>
+        <div class="cal-cell"><div class="cal-date green">30</div></div>
+        <!-- Row 6: 31 predicted -->
+        <div class="cal-cell"><div class="cal-date predicted">31</div></div>
+        <div class="cal-cell"><div class="cal-date empty">·</div></div>
+        <div class="cal-cell"><div class="cal-date empty">·</div></div>
+        <div class="cal-cell"><div class="cal-date empty">·</div></div>
+        <div class="cal-cell"><div class="cal-date empty">·</div></div>
+        <div class="cal-cell"><div class="cal-date empty">·</div></div>
+        <div class="cal-cell"><div class="cal-date empty">·</div></div>
+      </div>
+
+      <!-- Legend -->
+      <div class="cal-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#ff4d88;"></div>月经期</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#ffd6e6;border:1px solid #ffb3cc;"></div>预测经期</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(155,89,182,0.2);border:1px solid rgba(155,89,182,0.4);"></div>排卵期</div>
+        <div class="legend-item"><span style="font-size:12px;">🌸</span>排卵日</div>
+        <div class="legend-arrow"><span class="chevron-gray"></span></div>
+      </div>
+
+      <!-- Record list area -->
+      <div class="rec-list-wrap">
+        <div class="rec-list">
+          <!-- 月经来了 -->
+          <div class="rec-item">
+            <div class="rec-icon-wrap" style="background:#fff0f5;">
+              <svg width="20" height="24" viewBox="0 0 20 24" fill="none">
+                <path d="M10 1C10 1 3 9 3 14a7 7 0 0 0 14 0c0-5-7-13-7-13z" fill="#ff4d88"/>
+                <ellipse cx="7.5" cy="15" rx="1.5" ry="2.5" fill="rgba(255,255,255,0.42)" transform="rotate(-15 7.5 15)"/>
+              </svg>
+            </div>
+            <span class="rec-label">月经来了</span>
+            <div class="rec-right">
+              <div class="rec-ytoggle">
+                <span>是</span>
+                <span class="active">否</span>
+              </div>
+            </div>
+          </div>
+          <!-- 爱爱 -->
+          <div class="rec-item">
+            <div class="rec-icon-wrap" style="background:#fff0f0;">
+              <svg width="22" height="20" viewBox="0 0 24 22" fill="none">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="#ff7070"/>
+              </svg>
+            </div>
+            <span class="rec-label">爱爱</span>
+            <div class="rec-right">
+              <div class="rec-add-btn">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#ff4d88" stroke-width="1.5" stroke-linecap="round"><path d="M6 2v8M2 6h8"/></svg>
+              </div>
+            </div>
+          </div>
+          <!-- 症状 -->
+          <div class="rec-item">
+            <div class="rec-icon-wrap" style="background:#e8f4ff;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <rect x="4" y="2" width="16" height="20" rx="3" fill="#5bb7f5"/>
+                <path d="M8 7h8M8 11h8M8 15h5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="17.5" cy="17" r="4" fill="#fff" stroke="#5bb7f5" stroke-width="0.5"/>
+                <path d="M17.5 15v2l1.2 1.2" stroke="#5bb7f5" stroke-width="1.2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span class="rec-label">症状</span>
+            <div class="rec-right">
+              <div class="rec-add-btn">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#ff4d88" stroke-width="1.5" stroke-linecap="round"><path d="M6 2v8M2 6h8"/></svg>
+              </div>
+            </div>
+          </div>
+          <!-- 心情 -->
+          <div class="rec-item">
+            <div class="rec-icon-wrap" style="background:#fff9e0;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" fill="#ffd93d"/>
+                <circle cx="9" cy="10.5" r="1.4" fill="#555"/>
+                <circle cx="15" cy="10.5" r="1.4" fill="#555"/>
+                <path d="M8.5 14.5c1 1.8 6 1.8 7 0" stroke="#555" stroke-width="1.4" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span class="rec-label">心情</span>
+            <div class="rec-right">
+              <div class="rec-mood-row">
+                <div class="rec-mood-circle">😐</div>
+                <div class="rec-mood-circle">😤</div>
+                <div class="rec-mood-circle">😶</div>
+                <div class="rec-mood-circle">😪</div>
+                <div class="rec-mood-circle">🥱</div>
+              </div>
+              <div class="rec-add-btn">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#ff4d88" stroke-width="1.5" stroke-linecap="round"><path d="M6 2v8M2 6h8"/></svg>
+              </div>
+            </div>
+          </div>
+          <!-- 白带 -->
+          <div class="rec-item">
+            <div class="rec-icon-wrap" style="background:#f0ecff;">
+              <svg width="20" height="24" viewBox="0 0 20 24" fill="none">
+                <path d="M10 1C10 1 3 9 3 14a7 7 0 0 0 14 0c0-5-7-13-7-13z" fill="#9b7de8"/>
+                <ellipse cx="7.5" cy="15" rx="1.5" ry="2.5" fill="rgba(255,255,255,0.35)" transform="rotate(-10 7.5 15)"/>
+              </svg>
+            </div>
+            <span class="rec-label">白带</span>
+            <div class="rec-right">
+              <div class="rec-add-btn">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#ff4d88" stroke-width="1.5" stroke-linecap="round"><path d="M6 2v8M2 6h8"/></svg>
+              </div>
+            </div>
+          </div>
+          <!-- 体温 -->
+          <div class="rec-item">
+            <div class="rec-icon-wrap" style="background:#f0ecff;">
+              <svg width="16" height="24" viewBox="0 0 16 26" fill="none">
+                <rect x="5.5" y="1" width="5" height="16" rx="2.5" fill="#9b7de8"/>
+                <circle cx="8" cy="20" r="5" fill="#9b7de8"/>
+                <rect x="7" y="3" width="2" height="10" rx="1" fill="rgba(255,255,255,0.45)"/>
+                <circle cx="8" cy="20" r="2.5" fill="rgba(255,255,255,0.38)"/>
+              </svg>
+            </div>
+            <span class="rec-label">体温</span>
+            <div class="rec-right">
+              <div class="rec-add-btn">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#ff4d88" stroke-width="1.5" stroke-linecap="round"><path d="M6 2v8M2 6h8"/></svg>
+              </div>
+            </div>
+          </div>
+          <!-- 体重 -->
+          <div class="rec-item">
+            <div class="rec-icon-wrap" style="background:#f0ecff;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="3" width="18" height="18" rx="4" fill="#9b7de8"/>
+                <path d="M12 7c-2 0-3 1.4-3 2.8 0 1.6 1.5 3.2 3 5.2 1.5-2 3-3.6 3-5.2C15 8.4 14 7 12 7z" fill="#fff"/>
+                <circle cx="12" cy="9.8" r="1" fill="#9b7de8"/>
+              </svg>
+            </div>
+            <span class="rec-label">体重</span>
+            <div class="rec-right">
+              <div class="rec-add-btn">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#ff4d88" stroke-width="1.5" stroke-linecap="round"><path d="M6 2v8M2 6h8"/></svg>
+              </div>
+            </div>
+          </div>
+          <!-- 日记 -->
+          <div class="rec-item">
+            <div class="rec-icon-wrap" style="background:#fff5e0;">
+              <svg width="20" height="22" viewBox="0 0 20 22" fill="none">
+                <rect x="3" y="2" width="14" height="18" rx="2" fill="#ffb33d"/>
+                <rect x="3" y="2" width="3" height="18" fill="#e89a25"/>
+                <path d="M9 6h6M9 10h6M9 14h4" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span class="rec-label">日记</span>
+            <div class="rec-right">
+              <div class="rec-camera">
+                <svg width="22" height="20" viewBox="0 0 24 22" fill="none" stroke="#c8c8c8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                  <circle cx="12" cy="13" r="4"/>
+                </svg>
+              </div>
+              <div class="rec-arrow"></div>
+            </div>
+          </div>
+          <!-- 好习惯 -->
+          <div class="rec-item">
+            <div class="rec-icon-wrap" style="background:#e8f4ff;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M7 22V10l4-7c1.2.2 2 1 2 2.2V8h6.5c1.4 0 2.4 1.3 2 2.6l-2.5 9.4c-.3 1.2-1.4 2-2.6 2H7z" fill="#5bb7f5"/>
+                <rect x="2" y="10" width="4" height="12" rx="1" fill="#3a9bd9"/>
+              </svg>
+            </div>
+            <span class="rec-label">好习惯</span>
+            <div class="rec-right">
+              <div class="rec-habit-row">
+                <div class="rec-habit-circle">⚡</div>
+                <div class="rec-habit-circle">🍎</div>
+                <div class="rec-habit-circle">☕</div>
+                <div class="rec-habit-circle">🎾</div>
+              </div>
+            </div>
+          </div>
+          <!-- 便便 -->
+          <div class="rec-item">
+            <div class="rec-icon-wrap" style="background:#fff5e0;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M12 4c0 2 1.5 3 2.5 3.5C16 8 17 9 17 10.5c0 .5-.1 1-.3 1.4 1.8.4 3.3 1.8 3.3 3.8 0 2.2-1.8 4-4 4H8c-2.2 0-4-1.8-4-4 0-2 1.5-3.4 3.3-3.8C7.1 11.5 7 11 7 10.5 7 9 8 8 9.5 7.5 10.5 7 12 6 12 4z" fill="#f5c46d"/>
+                <ellipse cx="10" cy="15.5" rx="1.2" ry="1.4" fill="#5a3920"/>
+                <ellipse cx="14" cy="15.5" rx="1.2" ry="1.4" fill="#5a3920"/>
+              </svg>
+            </div>
+            <span class="rec-label">便便</span>
+            <div class="rec-right">
+              <div class="rec-add-btn">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#ff4d88" stroke-width="1.5" stroke-linecap="round"><path d="M6 2v8M2 6h8"/></svg>
+              </div>
+            </div>
+          </div>
+          <!-- 计划 -->
+          <div class="rec-item">
+            <div class="rec-icon-wrap" style="background:#e8f4ff;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="5" width="18" height="16" rx="2.5" fill="#5bb7f5"/>
+                <rect x="3" y="5" width="18" height="4" fill="#3a9bd9"/>
+                <rect x="6" y="2" width="2" height="5" rx="1" fill="#3a9bd9"/>
+                <rect x="16" y="2" width="2" height="5" rx="1" fill="#3a9bd9"/>
+                <path d="M8 13h3M8 16h6" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/>
+                <circle cx="6" cy="13" r="0.8" fill="#fff"/>
+                <circle cx="6" cy="16" r="0.8" fill="#fff"/>
+              </svg>
+            </div>
+            <span class="rec-label">计划</span>
+            <div class="rec-right">
+              <div class="rec-add-btn">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#ff4d88" stroke-width="1.5" stroke-linecap="round"><path d="M6 2v8M2 6h8"/></svg>
+              </div>
+            </div>
+          </div>
+          <!-- 疫苗本 -->
+          <div class="rec-item">
+            <div class="rec-icon-wrap" style="background:#e6f7ed;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="3" width="18" height="18" rx="4" fill="#2dc97a"/>
+                <path d="M12 8c-1.8 0-3 1.2-3 2.5 0 1.3 1 2.2 2 3 .3.2.5.5.5.8v1.2c0 .3.2.5.5.5s.5-.2.5-.5v-1.2c0-.3.2-.6.5-.8 1-.8 2-1.7 2-3C15 9.2 13.8 8 12 8z" fill="#fff"/>
+                <circle cx="10.5" cy="10.5" r="0.6" fill="#2dc97a"/>
+                <circle cx="13.5" cy="10.5" r="0.6" fill="#2dc97a"/>
+              </svg>
+            </div>
+            <span class="rec-label">疫苗本</span>
+            <div class="rec-right">
+              <div class="rec-arrow"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="height:16px;background:#f2f2f5;"></div>
+    </div>
+  </div>
+
+  <!-- ══ 我 Tab ══ -->
+  <div class="tab-page" id="page-me">
+    <div class="me-content">
+      <!-- User header -->
+      <div class="me-header">
+        <div class="me-avatar-wrap">
+          <div class="me-avatar">🐸</div>
+          <div class="me-vip-badge">✓VIP</div>
+        </div>
+        <div class="me-name-row">
+          <div class="me-username">
+            嗤科可刻
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="#aaa" stroke-width="1.5" stroke-linecap="round"><path d="M4.5 2.5l4 4-4 4"/></svg>
+          </div>
+        </div>
+        <div class="me-icons-row">
+          <div class="me-icon-btn">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="1.8" stroke-linecap="round">
+              <path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/>
+              <rect x="8" y="8" width="3.5" height="3.5" rx="0.5"/><rect x="12.5" y="8" width="3.5" height="3.5" rx="0.5"/>
+              <rect x="8" y="12.5" width="3.5" height="3.5" rx="0.5"/><rect x="12.5" y="12.5" width="3.5" height="3.5" rx="0.5"/>
+            </svg>
+          </div>
+          <div class="me-icon-btn">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="1.8" stroke-linecap="round">
+              <polyline points="20 12 20 22 4 22 4 12"/>
+              <rect x="2" y="7" width="20" height="5" rx="1"/>
+              <path d="M12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+              <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+            </svg>
+          </div>
+          <div class="me-icon-btn">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="1.8" stroke-linecap="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIP card -->
+      <div class="vip-card">
+        <div class="vip-top">
+          <div class="vip-left">
+            <svg width="14" height="13" viewBox="0 0 14 13" fill="#fff" opacity="0.9"><path d="M7 0l1.8 3.7 4 .6-2.9 2.8.7 4-3.6-1.9-3.6 1.9.7-4L1.2 4.3l4-.6z"/></svg>
+            <span class="vip-name">美柚会员</span>
+            <span class="vip-expire">2027-04-21到期</span>
+          </div>
+          <div class="vip-center-btn">会员中心</div>
+        </div>
+        <div class="vip-benefits">
+          <div class="vip-ben">
+            <div class="vip-ben-title">领美团108元神券 <svg width="9" height="9" viewBox="0 0 9 9" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round"><path d="M2 4.5h5M4.5 2l2.5 2.5L4.5 7"/></svg></div>
+            <div class="vip-ben-sub">更多生活福利 免费领</div>
+          </div>
+          <div class="vip-ben">
+            <div class="vip-ben-title">喂养规律分析 <svg width="9" height="9" viewBox="0 0 9 9" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round"><path d="M2 4.5h5M4.5 2l2.5 2.5L4.5 7"/></svg></div>
+            <div class="vip-ben-sub">一天喂几次合适？立即查看</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Promo -->
+      <div class="promo-strip">
+        <span class="promo-icon">🛍</span>
+        <span class="promo-text">买年卡送好礼！免费领500元爱康体检</span>
+        <div class="promo-link">查看 <span style="display:inline-block;width:5px;height:5px;border-right:1.5px solid #bbb;border-top:1.5px solid #bbb;transform:rotate(45deg);margin-left:3px;"></span></div>
+      </div>
+
+      <!-- Mode selector -->
+      <div class="mode-card">
+        <div class="mode-grid">
+          <div class="mode-item">
+            <div class="mode-img-wrap" style="background:#fff0f5;">
+              <svg width="52" height="52" viewBox="0 0 52 52" fill="none"><rect width="52" height="52" rx="12" fill="#fff0f5"/><path d="M26 10c0 0-9 10-9 16a9 9 0 0 0 18 0c0-6-9-16-9-16z" fill="#ff9ec4"/><rect x="8" y="30" width="8" height="3" rx="1.5" fill="#ffd6e6"/><rect x="36" y="30" width="8" height="3" rx="1.5" fill="#ffd6e6"/></svg>
+            </div>
+            <div class="mode-label">经期模式</div>
+          </div>
+          <div class="mode-item">
+            <div class="mode-img-wrap" style="background:#fff8e0;">
+              <svg width="52" height="52" viewBox="0 0 52 52" fill="none"><rect width="52" height="52" rx="12" fill="#fff8e0"/><ellipse cx="26" cy="22" rx="8" ry="8" fill="#ffd93d"/><ellipse cx="26" cy="22" rx="3" ry="3" fill="#fff" opacity="0.6"/><path d="M19 38c0-3.9 3.1-7 7-7s7 3.1 7 7" stroke="#ffa500" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg>
+            </div>
+            <div class="mode-label">备孕模式</div>
+          </div>
+          <div class="mode-item">
+            <div class="mode-img-wrap" style="background:#f0f8ff;">
+              <svg width="52" height="52" viewBox="0 0 52 52" fill="none"><rect width="52" height="52" rx="12" fill="#f0f8ff"/><ellipse cx="26" cy="28" rx="9" ry="11" fill="#a8d8ea"/><circle cx="26" cy="14" r="6" fill="#a8d8ea"/><ellipse cx="26" cy="26" rx="4" ry="4" fill="rgba(255,255,255,0.45)"/></svg>
+            </div>
+            <div class="mode-label">怀孕模式</div>
+          </div>
+          <div class="mode-item cur">
+            <div class="mode-img-wrap" style="background:#fff0f5;">
+              <svg width="52" height="52" viewBox="0 0 52 52" fill="none"><rect width="52" height="52" rx="12" fill="#fff0f5"/><circle cx="30" cy="20" r="7" fill="#ffb3cc"/><circle cx="30" cy="20" r="4" fill="#ff7ab5"/><path d="M18 34c0-4 2.5-8 7-9l3 4-4 9H18z" fill="#ff9ec4"/><path d="M37 34c0-4-2.5-8-7-9l-3 4 4 9h6z" fill="#ffb3cc"/></svg>
+            </div>
+            <div class="mode-label cur">育儿模式</div>
+            <div class="mode-cur-tag">当前</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings items -->
+      <div class="me-card">
+        <div class="me-card-item">
+          <div class="me-card-icon" style="background:#fff0f5;">
+            <svg width="20" height="22" viewBox="0 0 20 22" fill="none"><path d="M10 1C10 1 3 9 3 14a7 7 0 0 0 14 0c0-5-7-13-7-13z" fill="#ff7ab5"/></svg>
+          </div>
+          <span class="me-card-label">经期设置</span>
+          <span class="me-card-sub">周期 30 天，经期 7 天</span>
+          <span class="chevron-gray"></span>
+        </div>
+        <div class="me-card-item">
+          <div class="me-card-icon" style="background:#fff0f5;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="5" fill="#ff9ec4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="#ffd6e6"/></svg>
+          </div>
+          <span class="me-card-label">宝宝管理</span>
+          <div class="rec-right">
+            <div class="baby-ava-row">
+              <div class="baby-ava" style="background:#a8d8ea;">👶</div>
+              <div class="baby-ava" style="background:#c8a87a;">🐱</div>
+              <div class="baby-ava" style="background:#98d998;">🐶</div>
+              <div class="baby-ava" style="background:#f0c8a0;">👶</div>
+              <div class="baby-ava" style="background:#ccc;">🐱</div>
+            </div>
+            <span class="chevron-gray"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Account -->
+      <div class="me-card">
+        <div class="me-card-item">
+          <div class="me-card-icon" style="background:#fff0f5;border-radius:10px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="5" fill="#ff7ab5"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="#ff9ec4"/></svg>
+          </div>
+          <span class="me-card-label">个人主页</span>
+          <span class="chevron-gray"></span>
+        </div>
+        <div class="me-card-item">
+          <div class="me-card-icon" style="background:#fff9e0;border-radius:10px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="20" height="13" rx="2" fill="#ffd93d"/><path d="M2 11h20" stroke="#ffa500" stroke-width="1.4"/><rect x="6" y="15" width="5" height="2" rx="1" fill="#ffa500"/></svg>
+          </div>
+          <span class="me-card-label">钱包</span>
+          <span class="chevron-gray"></span>
+        </div>
+        <div class="me-card-item">
+          <div class="me-card-icon" style="background:#f0ecff;border-radius:10px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" fill="#9b7de8"/><path d="M3 9h18" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/><rect x="7" y="13" width="5" height="1.5" rx="0.75" fill="rgba(255,255,255,0.65)"/><rect x="14" y="13" width="4" height="1.5" rx="0.75" fill="rgba(255,255,255,0.65)"/></svg>
+          </div>
+          <span class="me-card-label">订单</span>
+          <span class="chevron-gray"></span>
+        </div>
+      </div>
+
+      <!-- Circles -->
+      <div class="circles-card">
+        <div class="circles-row">
+          <div class="circle-item">
+            <div class="circle-icon" style="background:linear-gradient(135deg,#74b9ff,#0984e3);">
+              <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><text x="13" y="18" text-anchor="middle" font-size="14" fill="#fff" font-family="PingFang SC">Ⅱ</text></svg>
+            </div>
+            <div class="circle-label">26年11月预<br>产圈</div>
+          </div>
+          <div class="circle-item">
+            <div class="circle-icon" style="background:linear-gradient(135deg,#fd79a8,#e84393);">
+              <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><text x="13" y="18" text-anchor="middle" font-size="14" fill="#fff" font-family="PingFang SC">9</text></svg>
+            </div>
+            <div class="circle-label">26年9月预<br>产圈</div>
+          </div>
+          <div class="circle-item">
+            <div class="circle-icon" style="background:linear-gradient(135deg,#a29bfe,#6c5ce7);">
+              <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><text x="13" y="18" text-anchor="middle" font-size="13" fill="#fff" font-family="PingFang SC">10</text></svg>
+            </div>
+            <div class="circle-label">26年10月预<br>产圈</div>
+          </div>
+          <div class="circle-item">
+            <div class="circle-icon" style="background:linear-gradient(135deg,#a29bfe,#6c5ce7);">
+              <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><text x="13" y="18" text-anchor="middle" font-size="13" fill="#fff" font-family="PingFang SC">10</text></svg>
+            </div>
+            <div class="circle-label">25年10月预<br>产圈</div>
+          </div>
+          <div class="circle-item">
+            <div class="circle-icon" style="background:linear-gradient(135deg,#ff7675,#e17055);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+            </div>
+            <div class="circle-label">更多圈子</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Services -->
+      <div class="services-card">
+        <div class="services-grid">
+          <div class="svc-item">
+            <div class="svc-icon" style="background:#fff0f5;">
+              <svg width="30" height="30" viewBox="0 0 30 30" fill="none"><rect width="30" height="30" rx="8" fill="#fff0f5"/><path d="M9 22l2-6 4-2 4 2 2 6H9z" fill="#ff9ec4"/><rect x="11" y="10" width="8" height="6" rx="2" fill="#ff7ab5"/></svg>
+            </div>
+            <div class="svc-label">柚子街</div>
+          </div>
+          <div class="svc-item">
+            <div class="svc-icon" style="background:#e0fff6;">
+              <svg width="30" height="30" viewBox="0 0 30 30" fill="none"><rect width="30" height="30" rx="8" fill="#e0fff6"/><circle cx="15" cy="15" r="8" fill="#00cc99" opacity="0.85"/><path d="M11 15l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="svc-label">问医生</div>
+          </div>
+          <div class="svc-item">
+            <div class="svc-icon" style="background:#fff5e0;">
+              <svg width="30" height="30" viewBox="0 0 30 30" fill="none"><rect width="30" height="30" rx="8" fill="#fff5e0"/><path d="M15 8c-4 0-6 2.5-6 5s2 4 3.5 4v3.5l5-3.5c2.5-1 3.5-2.5 3.5-4S19 8 15 8z" fill="#ffa500"/></svg>
+            </div>
+            <div class="svc-label">宝宝记</div>
+          </div>
+          <div class="svc-item">
+            <div class="svc-icon" style="background:#f0f5ff;">
+              <svg width="30" height="30" viewBox="0 0 30 30" fill="none"><rect width="30" height="30" rx="8" fill="#f0f5ff"/><rect x="8" y="8" width="6" height="6" rx="1.5" fill="#ff7ab5"/><rect x="16" y="8" width="6" height="6" rx="1.5" fill="#74b9ff"/><rect x="8" y="16" width="6" height="6" rx="1.5" fill="#00cc99"/><rect x="16" y="16" width="6" height="6" rx="1.5" fill="#ffd93d"/></svg>
+            </div>
+            <div class="svc-label">更多服务</div>
+          </div>
+          <div class="svc-item">
+            <div class="svc-icon" style="background:#fff0f5;">
+              <svg width="30" height="30" viewBox="0 0 30 30" fill="none"><rect width="30" height="30" rx="8" fill="#fff0f5"/><rect x="7" y="12" width="16" height="10" rx="2" fill="#ffb3cc"/><rect x="10" y="8" width="10" height="6" rx="1.5" fill="#ff9ec4"/><circle cx="15" cy="8" r="2" fill="#ff7ab5"/></svg>
+            </div>
+            <div class="svc-label">桌面小组件</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="height:12px;background:#f2f2f5;"></div>
+    </div>
+  </div>
+
+  <!-- ══ Bottom Tab Bar ══ -->
+  <div class="tabbar">
+    <div class="tb-item active" id="tb-home">
+      <div class="ic"><img id="icon-home" src="data:image/png;base64,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" alt="美柚"></div>
+      美柚
+    </div>
+    <div class="tb-item" id="tb-record">
+      <div class="ic"><img id="icon-record" src="data:image/png;base64,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" alt="记录"></div>
+      记录
+    </div>
+    <div class="tb-item">
+      <div class="ic"><img src="data:image/jpeg;base64,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" alt="返现"></div>
+      返现
+    </div>
+    <div class="tb-item">
+      <div class="ic"><img src="data:image/jpeg;base64,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" alt="消息"></div>
+      消息
+    </div>
+    <div class="tb-item" id="tb-me">
+      <div class="ic"><img id="icon-me" src="data:image/jpeg;base64,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" alt="我"></div>
+      我
+    </div>
+  </div>
+
+</div>
+
+</div>
+
+<script>
+const ICON_RECORD_ACTIVE = "data:image/png;base64,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";
+const ICON_ME_ACTIVE = "data:image/png;base64,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";
+const ICON_HOME_INACTIVE = "data:image/png;base64,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";
+
+// Store original icon srcs after DOM is ready
+let origIconRecord = null;
+let origIconMe = null;
+let origIconHome = null;
+
+function switchTab(tab) {
+  // Capture originals on first call
+  if (!origIconRecord) origIconRecord = document.getElementById('icon-record').src;
+  if (!origIconMe) origIconMe = document.getElementById('icon-me').src;
+  if (!origIconHome) origIconHome = document.getElementById('icon-home').src;
+
+  // Hide all pages
+  document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+  // Remove all tab active
+  document.querySelectorAll('.tb-item').forEach(t => t.classList.remove('active'));
+
+  // Show page
+  const page = document.getElementById('page-' + tab);
+  if (page) page.classList.add('active');
+
+  // Activate correct tab and swap icon
+  const tabMap = { home: 'tb-home', record: 'tb-record', msg: null, me: 'tb-me' };
+  const tbId = tabMap[tab];
+  if (tbId) document.getElementById(tbId).classList.add('active');
+
+  // Swap icons
+  document.getElementById('icon-record').src = (tab === 'record') ? ICON_RECORD_ACTIVE : origIconRecord;
+  document.getElementById('icon-me').src     = (tab === 'me')     ? ICON_ME_ACTIVE     : origIconMe;
+  document.getElementById('icon-home').src   = (tab === 'home')   ? origIconHome       : ICON_HOME_INACTIVE;
+}
+
+// Wire up clicks after DOM ready
+window.addEventListener('DOMContentLoaded', function() {
+  origIconRecord = document.getElementById('icon-record').src;
+  origIconMe     = document.getElementById('icon-me').src;
+  origIconHome   = document.getElementById('icon-home').src;
+
+  document.getElementById('tb-home')  .addEventListener('click', () => switchTab('home'));
+  document.getElementById('tb-record').addEventListener('click', () => switchTab('record'));
+  document.getElementById('tb-me')    .addEventListener('click', () => switchTab('me'));
+});
+
+// ── Auto-scale: keep phone mockup fully visible without outer scroll ──
+(function () {
+  var phone = document.querySelector('.phone');
+  var W = 393, H = 852;
+  function scale() {
+    var s = Math.min(window.innerWidth / W, window.innerHeight / H, 1);
+    phone.style.transform       = 'scale(' + s + ')';
+    phone.style.transformOrigin = 'center center';
+  }
+  scale();
+  window.addEventListener('resize', scale);
+})();
+</script>
+</body>
+</html>
